@@ -1,0 +1,36 @@
+
+
+void bfs(vector<vector<int>> &adj,vector<int>& ans,vector<int> &visited,int node){
+     
+    queue<int>q;
+    q.push(node);
+    visited[node]=1;
+    while(q.empty()==false){
+        int front=q.front();
+        q.pop();
+        ans.push_back(front);
+        
+        
+        for(auto i:adj[front]){
+            if(visited[i]==0){
+                q.push(i);
+                visited[i]=1;
+            }
+            
+        }
+    }
+
+}
+
+vector<int> bfsOfGraph(vector<vector<int>> &adj) {
+    // Code here
+    int v=adj.size();
+    vector<int> ans;
+    vector<int> visited(v,0);
+    
+   
+    bfs(adj,ans,visited,0);
+          
+    return ans;
+    
+}
