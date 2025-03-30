@@ -92,3 +92,63 @@ then for a check we will see that we have visited all the nodes or not ;
 
 then if all are visited , then we will backtrack to the src from the destination to src and  push all the intermediate node to the path vector and at last reverse it to return !!
 
+
+
+//apply dijkstra on the matrix
+
+typedef pair<int,pair<int,int>> P;
+int n,m;
+
+bool isGood(int a,int b){
+    return a>=0 and b>=0 and a<n and b<m ;
+}
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        
+        n=grid.size();
+        m=grid[0].size();
+        vector<pair<int,int>>directions={{0,0},{0,1},{1,0},{1,1},{-1,0},{-1,-1},{0,-1},{-1,1},{1,-1}};
+        vector<vector<int>> result(n,vector<int>(m,INT_MAX));
+        int level=0;
+
+
+        if(n==0 or m==0 or grid[0][0]==1)
+            return -1;
+        
+        priority_queue<P,vector<P>,greater<P>>pq;
+
+        pq.push({0,{0,0}});
+        result[0][0]=0;
+
+        while(pq.empty()==false){
+            int d=pq.top().first;
+            pair<int,int> node=pq.top().second;
+            int x=node.first;
+            int y=node.second;
+            pq.pop();
+
+            for(auto ele:directions){
+                int a=x+ele.first;
+                int b=y+ele.second;
+
+                int dist=1;
+
+                if(isGood(a,b) and grid[a][b]==0 and d+dist<result[a][b]){
+                    result[a][b]=d+dist;
+                    pq.push({d+dist,{a,b}});
+                }
+            }
+
+
+
+        }
+
+        if(result[n-1][m-1]!=INT_MAX){
+            return result[n-1][m-1]+1;
+        }
+        return -1;
+        
+
+
+        
+    }
+
