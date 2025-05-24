@@ -1,0 +1,154 @@
+//shortest path and the Minimum distance from sources to other nodes
+
+//basically it is creating a minimun spanning tree
+
+//weighted undirected graph
+
+vector<int> shortest path(vector<vector<int>> edges ,int vertices ,int src){
+
+    //edges is like this = {{from, to, weight}}
+
+    //making the adjecency list 
+
+    unordered_map<int, vector<pair<int,int>>> adj;
+
+    for(auto ele : edges){
+        int u=ele[0];
+        int v=ele[1];
+        int w=ele[2];
+
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+
+    vector<int> distance(vertices,INT_MAX);
+    distance[src]=0;
+    
+    vector<int> parent(vertices);
+
+
+    //assigning them as there own parents 
+
+    for(int i=0;i<vertices.size();i++){
+        parent[i]=i; 
+    }
+
+
+    //created a min heap for the priority for the shortest distance available at the moment !!!
+    priority_queue<pair<int,int>, vector<pair<int,int>>,greater<pair<int,int>>> pq;
+
+    //pq.push({distance,node});
+    pq.push({0,src});
+
+    while(pq.empty()==false){
+        int d=pq.top().first;
+        int node=pq.top().second;
+        pq.pop();
+
+        for(auto it: adj[node]){
+            int neigh=it.first;
+            int dist=it.second;
+
+            if(d+dist<distance[neigh]){
+                distance[neigh]=d+dist;
+                pq.push({d+dist,neigh});
+                parent[neigh]=node;
+            }
+        }
+    }
+
+    int destinationNode=vertices-1;
+
+
+
+    if(distance[destinationNode]==INT_MAX_)
+        return{-1};
+    
+    vector<int > path(vertices);
+    while(parent[destinationNode]!=destinationNode){
+        path.push(destinationNode);
+        destinationNode=parent[destinationNode];
+    }
+
+    path.push_back(src);
+
+    reverse(begin(path),end(path));
+
+    return path;
+}
+
+//story:
+
+we are given with the src and destinationNode OR we have to visit all the node and we should also known the path by which we can reach that node by minimun cost of travelling ....
+
+so are apporach is that we will take the distance vector in which we will store the minimun cost of all the respective nodes 
+at first we will initialize it with the INTMAX value for denoting the currently we had not reached any node 
+
+then we will use the priority queue for geting the node by which give us the minimun cost for travling any neighboring nodes from all the visited nodes and push it as {distance,node}
+And simultaneously with this process we will update the parent and distance vector ;
+
+then for a check we will see that we have visited all the nodes or not ;
+
+then if all are visited , then we will backtrack to the src from the destination to src and  push all the intermediate node to the path vector and at last reverse it to return !!
+
+
+
+//apply dijkstra on the matrix
+
+typedef pair<int,pair<int,int>> P;
+int n,m;
+    
+bool isGood(int a,int b){
+    return a>=0 and b>=0 and a<n and b<m ;
+}
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        
+        n=grid.size();
+        m=grid[0].size();
+        vector<pair<int,int>>directions={{0,0},{0,1},{1,0},{1,1},{-1,0},{-1,-1},{0,-1},{-1,1},{1,-1}};
+        vector<vector<int>> result(n,vector<int>(m,INT_MAX));
+        int level=0;
+
+
+        if(n==0 or m==0 or grid[0][0]==1)
+            return -1;
+        
+        priority_queue<P,vector<P>,greater<P>>pq;
+
+        pq.push({0,{0,0}});
+        result[0][0]=0;
+
+        while(pq.empty()==false){
+            int d=pq.top().first;
+            pair<int,int> node=pq.top().second;
+            int x=node.first;
+            int y=node.second;
+            pq.pop();
+
+            for(auto ele:directions){
+                int a=x+ele.first;
+                int b=y+ele.second;
+
+                int dist=1;
+
+                if(isGood(a,b) and grid[a][b]==0 and d+dist<result[a][b]){
+                    result[a][b]=d+dist;
+                    pq.push({d+dist,{a,b}});
+                }
+            }
+
+
+
+        }
+
+        if(result[n-1][m-1]!=INT_MAX){
+            return result[n-1][m-1]+1;
+        }
+        return -1;
+        
+
+
+        
+    }
+

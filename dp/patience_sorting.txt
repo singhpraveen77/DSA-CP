@@ -1,0 +1,35 @@
+//longest increasing subsequence 
+
+//theory:
+//traverse thought each element in the array (0 -> n);
+already made array sorted (empty initialy)
+
+use lower_bound funtion to serach for the element just greater than or equal to current element 
+
+if found the element address is stored as it and accessed by it* =nums[i] 
+by this we keep our array sorted 
+else 
+make a new entry for it with sorted push back 
+
+and lenght of lis is sorted array length ...
+
+
+//code 
+int lengthOfLIS(vector<int>& nums) {
+        
+        //patients sorting !!
+        int n=nums.size();
+        vector<int> sorted;
+
+        for(int i=0;i<n;i++){
+            auto it=lower_bound(begin(sorted),end(sorted),nums[i]);
+
+            if(it==end(sorted))
+                sorted.push_back(nums[i]);
+            else {
+                *it=nums[i];
+            }
+
+        }
+        return sorted.size();
+    }

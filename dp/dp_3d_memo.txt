@@ -1,0 +1,38 @@
+question : 1420
+
+build and array where you can find exactly comparision equal to k
+
+//code 
+int N,M,K;
+
+int dp[51][51][101];
+
+int MOD= 1e9+7;
+
+int solve(int n,int maxSoFar,int searchCost,int i){
+    if(i>=n){
+        if(searchCost==K){
+            return 1;
+        }
+        else return 0;
+    }
+
+    if(dp[i][searchCost][maxSoFar]!=-1)return dp[i][searchCost][maxSoFar];
+    int result=0;
+    for(int j=1;j<=M;j++){
+        if(j<=maxSoFar){
+            result= (result+solve(n,maxSoFar,searchCost,i+1))%MOD;
+        }
+        else {
+            result=(result+ solve(n,j,searchCost+1,i+1))%MOD;
+        }
+    }
+    return dp[i][searchCost][maxSoFar]=result%MOD;
+}
+    int numOfArrays(int n, int m, int k) {
+        N=n,M=m,K=k;
+        memset(dp,-1,sizeof(dp));
+        return solve(n,0,0,0);
+
+
+    }
