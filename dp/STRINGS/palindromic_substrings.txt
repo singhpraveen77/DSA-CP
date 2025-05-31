@@ -1,0 +1,52 @@
+this is the blue print of the palindromic strings and many more same type of problems
+
+here is a code for recurrsion momoization and bottom up approach ::
+
+class Solution {
+public:
+
+// int dp[1001][1001];
+// bool check(string & s , int i,int j){
+
+//     if(i>=j)return true;
+
+//     if(dp[i][j]!=-1)return dp[i][j];
+
+//     if(s[i]==s[j])return dp[i][j]= check(s,i+1,j-1);
+
+//     return dp[i][j]= false;
+// }
+
+
+    int countSubstrings(string s) {
+        // memset(dp,-1,sizeof(dp));
+        
+        int n=s.size();
+        int cnt=0;
+
+        vector<vector<bool>> dp(n,vector<bool>(n,false));
+        
+        for(int l=1;l<=n;l++){
+            for(int i=0;i+l-1<n;i++){
+                int j=i+l-1;
+                if(i==j)
+                    dp[i][j]=true;
+                
+                else if(l==2){
+                    if(s[i]==s[j])
+                        dp[i][j]=true;
+                    else 
+                        dp[i][j]=false;
+                }
+                else {
+                    dp[i][j]=(s[i]==s[j] and (dp[i+1][j-1]));
+                }
+                if(dp[i][j]==true)cnt++;
+
+
+
+            }
+        }
+        return cnt;
+    }
+};
